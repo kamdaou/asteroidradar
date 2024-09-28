@@ -2,7 +2,7 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -10,7 +10,7 @@ plugins {
 
 val envPropertiesFile: File = rootProject.file("env.properties")
 val envProperties = Properties()
-envProperties.load(envPropertiesFile?.let { FileInputStream(it) })
+envProperties.load(FileInputStream(envPropertiesFile))
 
 android {
     namespace = "com.ampersand.data"
@@ -58,7 +58,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.bundles.retrofit)
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
+    implementation(libs.bundles.room)
+    ksp(libs.room.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

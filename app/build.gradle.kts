@@ -1,7 +1,8 @@
 plugins {
-    id("kotlin-kapt")
-    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.android.application)
+    id("kotlin-parcelize")
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.kotlin.android)
 }
 
@@ -52,13 +53,9 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
+    ksp(libs.dagger.hilt.compiler)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-}
-
-kapt {
-    correctErrorTypes = true
 }

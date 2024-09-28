@@ -1,15 +1,15 @@
 package com.ampersand.data.utils
 
-import com.ampersand.domain.model.AsteroidModel
+import com.ampersand.data.service.local.entitiy.AsteroidEntity
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidModel> {
+fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidEntity> {
     val nearEarthObjectsJson = jsonResult.getJSONObject("near_earth_objects")
 
-    val asteroidList = ArrayList<AsteroidModel>()
+    val asteroidList = ArrayList<AsteroidEntity>()
 
     val nextSevenDaysFormattedDates = getNextSevenDaysFormattedDates()
     for (formattedDate in nextSevenDaysFormattedDates) {
@@ -32,7 +32,7 @@ fun parseAsteroidsJsonResult(jsonResult: JSONObject): ArrayList<AsteroidModel> {
             val isPotentiallyHazardous = asteroidJson
                 .getBoolean("is_potentially_hazardous_asteroid")
 
-            val asteroid = AsteroidModel(
+            val asteroid = AsteroidEntity(
                 id, codename, formattedDate, absoluteMagnitude,
                 estimatedDiameter, relativeVelocity, distanceFromEarth, isPotentiallyHazardous
             )
