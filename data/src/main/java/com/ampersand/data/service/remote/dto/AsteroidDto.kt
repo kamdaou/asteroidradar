@@ -1,7 +1,7 @@
-package com.ampersand.domain.model
+package com.ampersand.data.service.remote.dto
 
-data class AsteroidModel(
-    val id: Long = 0L,
+data class AsteroidDto(
+    val id: Long,
 
     val codename: String,
 

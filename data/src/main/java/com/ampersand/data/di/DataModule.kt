@@ -1,7 +1,7 @@
 package com.ampersand.data.di
 
 import com.ampersand.data.repository.NasaRepositoryImpl
-import com.ampersand.data.service.NasaApiService
+import com.ampersand.data.service.remote.NasaApiService
 import com.ampersand.domain.repository.NasaRepository
 import dagger.Module
 import dagger.Provides
@@ -9,7 +9,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -31,7 +31,7 @@ object DataModule {
     fun provideNasaApiService(): NasaApiService {
         return Retrofit.Builder()
             .baseUrl("https://api.nasa.gov/")
-            .addConverterFactory(MoshiConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .build()
             .create(NasaApiService::class.java)
     }

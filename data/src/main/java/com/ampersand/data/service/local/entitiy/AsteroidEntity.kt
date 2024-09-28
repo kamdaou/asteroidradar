@@ -1,6 +1,6 @@
-package com.ampersand.domain.model
+package com.ampersand.data.service.local.entitiy
 
-data class AsteroidModel(
+data class AsteroidEntity(
     val id: Long = 0L,
 
     val codename: String,

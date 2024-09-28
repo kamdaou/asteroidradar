@@ -26,14 +26,14 @@ androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltVersion" }
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltVersion" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit" }
 moshi-converter = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 
 [bundles]
 retrofit = [
     "retrofit",
-    "moshi-converter",
-    "gson"
+    "scalars",
 ]
 
 [plugins]

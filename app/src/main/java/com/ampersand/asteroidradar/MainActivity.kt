@@ -1,16 +1,15 @@
-package com.ampersand.asteroidradar.ui
+package com.ampersand.asteroidradar
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.ampersand.asteroidradar.R
 import com.ampersand.asteroidradar.databinding.ActivityMainBinding
+import com.ampersand.asteroidradar.ui.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
