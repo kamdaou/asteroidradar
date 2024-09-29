@@ -1,10 +1,11 @@
-package com.ampersand.presentation
+package com.ampersand.presentation.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ampersand.core.ApiResult
 import com.ampersand.domain.model.AsteroidModel
 import com.ampersand.domain.use_case.UseCaseWrapper
+import com.ampersand.presentation.Asteroid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,9 +58,9 @@ class MainViewModel @Inject constructor(
             }
         }
         .onEach { emitted ->
-            emitted.firstOrNull()?.let { emitted ->
+            emitted.firstOrNull()?.let { firstEmittedAsteroid ->
                 _selectedAsteroid.update {
-                    emitted
+                    firstEmittedAsteroid
                 }
             }
             if (_loading.value)
@@ -102,9 +103,5 @@ class MainViewModel @Inject constructor(
 
     fun onAsteroidDetailNavigated() {
         _navigateToAsteroidDetail.value = null
-    }
-
-    fun isUsingTable(boolean: Boolean) {
-        isTablet.update { boolean }
     }
 }

@@ -1,4 +1,4 @@
-package com.ampersand.presentation
+package com.ampersand.presentation.main
 
 import android.content.Context
 import android.content.res.Configuration
@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.ampersand.presentation.databinding.FragmentMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -54,8 +55,12 @@ class MainFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.navigateToAsteroidDetail.collect { asteroid ->
                     if (asteroid != null) {
-//                        this@MainFragment.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
-                        //tell the fragment that navigation was done
+                        this@MainFragment.findNavController().navigate(
+                            MainFragmentDirections.actionShowDetail(
+                                asteroid
+                            )
+                        )
+//                        tell the fragment that navigation was done
                         mainViewModel.onAsteroidDetailNavigated()
                     }
                 }

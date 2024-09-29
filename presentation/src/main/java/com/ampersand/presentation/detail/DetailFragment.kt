@@ -17,6 +17,9 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentDetailBinding.inflate(inflater)
+        val asteroid = DetailFragmentArgs.fromBundle(requireArguments()).selectedAsteroid
+        binding.asteroid = asteroid
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }

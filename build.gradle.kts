@@ -9,7 +9,10 @@ plugins {
 }
 
 buildscript {
+    repositories {
+        google()
+    }
     dependencies {
-//        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
+        classpath(libs.androidx.navigation.safe.args.gradle.plugin)
     }
 }

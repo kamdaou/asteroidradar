@@ -11,7 +11,7 @@
 
         <variable
             name="clickListener"
-            type="com.ampersand.presentation.AsteroidListener" />
+            type="com.ampersand.presentation.main.AsteroidListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

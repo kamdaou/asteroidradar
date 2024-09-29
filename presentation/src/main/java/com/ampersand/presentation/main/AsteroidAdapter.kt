@@ -1,10 +1,11 @@
-package com.ampersand.presentation
+package com.ampersand.presentation.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.ampersand.presentation.Asteroid
 import com.ampersand.presentation.databinding.ListItemBinding
 
 class AsteroidAdapter(val clickListener: AsteroidListener) :

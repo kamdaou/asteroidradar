@@ -1,29 +1,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/presentation_nav_graph">
 
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.ampersand.presentation.MainFragment"
-        android:label="fragment_main"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_showDetail"
-            app:destination="@id/detailFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/detailFragment"
-        android:name="com.ampersand.presentation.detail.DetailFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail">
-
-
-        <action
-            android:id="@+id/action_detailFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
-
+    <include app:graph="@navigation/presentation_nav_graph" />
 </navigation>
