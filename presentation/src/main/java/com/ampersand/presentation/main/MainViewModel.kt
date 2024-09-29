@@ -7,7 +7,6 @@ import com.ampersand.domain.model.AsteroidModel
 import com.ampersand.domain.use_case.UseCaseWrapper
 import com.ampersand.presentation.Asteroid
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -64,19 +63,17 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            launch { useCaseWrapper.fetchAsteroidsUseCase() }
-            val dayImageResponse = async { useCaseWrapper.getDayImageUseCase() }
-            val awaited = dayImageResponse.await()
-            if (awaited is ApiResult.Success) {
+            val dayImageResponse = useCaseWrapper.getDayImageUseCase()
+            if (dayImageResponse is ApiResult.Success) {
                 _uiState.update {
                     it.copy(
-                        dayImageUrl = awaited.data
+                        dayImageUrl = dayImageResponse.data
                     )
                 }
             } else {
                 _uiState.update {
                     it.copy(
-                        error = (awaited as ApiResult.Error).message
+                        error = (dayImageResponse as ApiResult.Error).message
                     )
                 }
             }

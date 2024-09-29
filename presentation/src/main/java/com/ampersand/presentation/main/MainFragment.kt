@@ -1,7 +1,5 @@
 package com.ampersand.presentation.main
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +35,7 @@ class MainFragment : Fragment() {
         binding.mainViewModel = mainViewModel
 
         val adapter = AsteroidAdapter(AsteroidListener { asteroidId ->
-            mainViewModel.onAsteroidClicked(asteroidId, isTablet = isTablet(this.context))
+            mainViewModel.onAsteroidClicked(asteroidId, isTablet = isScreenWidthGreaterThan600dp())
         })
 
 
@@ -47,7 +45,8 @@ class MainFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.uiState.collect {
-                    binding.statusLoadingWheel.visibility = if (it.loading) View.VISIBLE else View.GONE
+                    binding.statusLoadingWheel.visibility =
+                        if (it.loading) View.VISIBLE else View.GONE
                     if (it.navigateToAsteroidDetail != null) {
                         this@MainFragment.findNavController().navigate(
                             MainFragmentDirections.actionShowDetail(
@@ -89,8 +88,9 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-    private fun isTablet(context: Context?): Boolean {
-        if (context == null) return false
-        return (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
+    private fun isScreenWidthGreaterThan600dp(): Boolean {
+        val displayMetrics = resources.displayMetrics
+        val widthInDp = displayMetrics.widthPixels / displayMetrics.density
+        return widthInDp > 600
     }
 }
