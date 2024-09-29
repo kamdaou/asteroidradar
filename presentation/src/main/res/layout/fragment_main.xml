@@ -23,13 +23,13 @@
             app:layout_constraintBottom_toTopOf="@id/guideline">
 
             <ImageView
-                android:id="@+id/activity_main_image_of_the_day"
+                android:id="@+id/activity_main_image_of_the_day600"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/day_image_description"
                 android:scaleType="centerCrop"
-                app:dayImage="@{mainViewModel.dayImageUrl}"
+                app:dayImage="@{mainViewModel.uiState.dayImageUrl}"
                 app:srcCompat="@drawable/placeholder_picture_of_day" />
 
             <TextView

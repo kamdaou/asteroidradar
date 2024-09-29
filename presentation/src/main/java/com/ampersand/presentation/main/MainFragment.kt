@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.ampersand.presentation.databinding.FragmentMainBinding
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,7 +29,7 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        val mainViewModel: MainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        val mainViewModel: MainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         _binding = FragmentMainBinding.inflate(inflater)
 
         binding.lifecycleOwner = viewLifecycleOwner
@@ -45,27 +46,31 @@ class MainFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.loading.collect {
-                    binding.statusLoadingWheel.visibility = if (it) View.VISIBLE else View.GONE
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                mainViewModel.navigateToAsteroidDetail.collect { asteroid ->
-                    if (asteroid != null) {
+                mainViewModel.uiState.collect {
+                    binding.statusLoadingWheel.visibility = if (it.loading) View.VISIBLE else View.GONE
+                    if (it.navigateToAsteroidDetail != null) {
                         this@MainFragment.findNavController().navigate(
                             MainFragmentDirections.actionShowDetail(
-                                asteroid
+                                it.navigateToAsteroidDetail
                             )
                         )
 //                        tell the fragment that navigation was done
                         mainViewModel.onAsteroidDetailNavigated()
                     }
+
+                    if (it.error != null) {
+                        Snackbar.make(
+                            this@MainFragment.requireView(),
+                            it.error.asString(this@MainFragment.requireContext()),
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        mainViewModel.onErrorShown()
+                    }
                 }
             }
         }
+
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.asteroids.collect { asteroids ->

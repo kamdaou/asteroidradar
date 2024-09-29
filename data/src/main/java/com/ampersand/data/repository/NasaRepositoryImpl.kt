@@ -41,19 +41,6 @@ class NasaRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getAsteroidById(id: Long): ApiResult<AsteroidModel> =
-        withContext(ioDispatcher) {
-            try {
-                dao.getAsteroidById(id)?.let { asteroidEntity ->
-                    return@withContext ApiResult.Success(asteroidEntity.toAsteroidModel())
-                }
-                return@withContext ApiResult.Error(message = UiText.StringResource(R.string.error_not_found))
-            } catch (e: Exception) {
-                Log.e("NasaRepositoryImpl", "getAsteroidById: ${e.localizedMessage}")
-                return@withContext ApiResult.Error(message = UiText.DynamicString(e.localizedMessage))
-            }
-        }
-
     override fun getAsteroids(): Flow<List<AsteroidModel>> {
         return dao.fetchAsteroids()
             .catch { e: Throwable ->

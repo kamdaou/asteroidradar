@@ -11,7 +11,25 @@ sealed class UiText : Parcelable {
     data class StringResource(
         @StringRes val id: Int,
         val args: Array<Int> = arrayOf()
-    ) : UiText()
+    ) : UiText() {
+        override fun equals(other: Any?): Boolean {
+            if (this === other) return true
+            if (javaClass != other?.javaClass) return false
+
+            other as StringResource
+
+            if (id != other.id) return false
+            if (!args.contentEquals(other.args)) return false
+
+            return true
+        }
+
+        override fun hashCode(): Int {
+            var result = id
+            result = 31 * result + args.contentHashCode()
+            return result
+        }
+    }
 
     fun asString(context: Context): String {
         return when (this) {

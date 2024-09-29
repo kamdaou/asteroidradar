@@ -27,7 +27,7 @@ fun ImageView.setAsteroidImage(item: Asteroid?) {
 @BindingAdapter("asteroidCodename")
 fun TextView.setAsteroidCodeName(item: Asteroid?) {
     item?.let {
-        text = item.codename.toString()
+        text = item.codename
     }
 }
 

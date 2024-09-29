@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/activity_main_image_of_the_day"
+            android:id="@+id/activity_main_image_of_the_day600"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -33,7 +33,7 @@
             android:padding="@dimen/spacing_normal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/activity_main_image_of_the_day">
+            app:layout_constraintTop_toBottomOf="@+id/activity_main_image_of_the_day600">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -54,7 +54,7 @@
                         android:id="@+id/close_approach_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_verry_small"
+                        android:layout_marginTop="@dimen/spacing_very_small"
                         app:closeApproachDate="@{asteroid.closeApproachDate}"
                         tools:text="2020-02-01" />
                 </LinearLayout>
@@ -81,7 +81,7 @@
                             android:id="@+id/absolute_magnitude"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/spacing_verry_small"
+                            android:layout_marginTop="@dimen/spacing_very_small"
 
                             app:astronomicalUnitText="@{asteroid.absoluteMagnitude}"
                             tools:text="25.126 au" />
@@ -125,7 +125,7 @@
                         android:id="@+id/relative_velocity"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_verry_small"
+                        android:layout_marginTop="@dimen/spacing_very_small"
                         app:velocityText="@{asteroid.relativeVelocity}"
                         tools:text="11.9 km/s" />
 
@@ -138,7 +138,7 @@
                         android:id="@+id/distance_from_earth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/spacing_verry_small"
+                        android:layout_marginTop="@dimen/spacing_very_small"
                         app:astronomicalUnitText="@{asteroid.distanceFromEarth}"
                         tools:text="0.0924 au" />
                 </LinearLayout>

@@ -24,48 +24,36 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val useCaseWrapper: UseCaseWrapper
 ) : ViewModel() {
-    private val _loading = MutableStateFlow(false)
-    val loading: StateFlow<Boolean> = _loading.asStateFlow()
-
-    private var _navigateToAsteroidDetail = MutableStateFlow<Asteroid?>(null)
-    val navigateToAsteroidDetail: StateFlow<Asteroid?> = _navigateToAsteroidDetail.asStateFlow()
-
-    private val _selectedAsteroid = MutableStateFlow<Asteroid?>(null)
-    val selectedAsteroid: StateFlow<Asteroid?> = _selectedAsteroid.asStateFlow()
-
-    private val isTablet = MutableStateFlow(false)
+    private val _uiState = MutableStateFlow(MainUiState())
+    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
     val asteroids = useCaseWrapper
         .getAsteroidsUseCase()
         .onStart {
-            _loading.update {
-                true
+            _uiState.update {
+                it.copy(
+                    loading = true
+                )
             }
         }
         .map { asteroids ->
             asteroids.map { asteroidModel: AsteroidModel ->
-                val closeApproachDate = useCaseWrapper.calculateCloseApproachUseCase(asteroidModel)
-                Asteroid(
-                    id = asteroidModel.id,
-                    codename = asteroidModel.codename,
-                    closeApproachDate = closeApproachDate,
-                    absoluteMagnitude = asteroidModel.absoluteMagnitude,
-                    estimatedDiameter = asteroidModel.estimatedDiameter,
-                    relativeVelocity = asteroidModel.relativeVelocity,
-                    distanceFromEarth = asteroidModel.distanceFromEarth,
-                    isPotentiallyHazardous = asteroidModel.isPotentiallyHazardous
-                )
+                asteroidModel.toAsteroid()
             }
         }
         .onEach { emitted ->
             emitted.firstOrNull()?.let { firstEmittedAsteroid ->
-                _selectedAsteroid.update {
-                    firstEmittedAsteroid
+                _uiState.update {
+                    it.copy(
+                        selectedAsteroid = firstEmittedAsteroid
+                    )
                 }
             }
-            if (_loading.value)
-                _loading.update {
-                    false
+            if (_uiState.value.loading)
+                _uiState.update {
+                    it.copy(
+                        loading = false
+                    )
                 }
         }
         .stateIn(
@@ -74,34 +62,72 @@ class MainViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    private var _dayImageUrl = MutableStateFlow("")
-    val dayImageUrl: StateFlow<String> = _dayImageUrl.asStateFlow()
-
     init {
         viewModelScope.launch {
             launch { useCaseWrapper.fetchAsteroidsUseCase() }
             val dayImageResponse = async { useCaseWrapper.getDayImageUseCase() }
             val awaited = dayImageResponse.await()
             if (awaited is ApiResult.Success) {
-                _dayImageUrl.value = awaited.data
+                _uiState.update {
+                    it.copy(
+                        dayImageUrl = awaited.data
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        error = (awaited as ApiResult.Error).message
+                    )
+                }
             }
         }
     }
 
     fun onAsteroidClicked(asteroidId: Long, isTablet: Boolean) {
-        _selectedAsteroid.update {
-            asteroids.value.find {
-                it.id == asteroidId
-            }
+        _uiState.update { oldUiState ->
+            oldUiState.copy(
+                selectedAsteroid = asteroids.value.find {
+                    it.id == asteroidId
+                }
+            )
         }
+
         if (!isTablet) {
-            _navigateToAsteroidDetail.update {
-                _selectedAsteroid.value
+            _uiState.update { oldUiState ->
+                oldUiState.copy(
+                    navigateToAsteroidDetail = uiState.value.selectedAsteroid
+                )
             }
         }
     }
 
     fun onAsteroidDetailNavigated() {
-        _navigateToAsteroidDetail.value = null
+        _uiState.update {
+            it.copy(
+                navigateToAsteroidDetail = null
+            )
+        }
+    }
+
+    fun onErrorShown() {
+        _uiState.update {
+            it.copy(
+                error = null
+            )
+        }
+    }
+
+    private fun AsteroidModel.toAsteroid(): Asteroid {
+        val closeApproachDate = useCaseWrapper.calculateCloseApproachUseCase(this)
+        return Asteroid(
+            id = id,
+            codename = codename,
+            closeApproachDate = closeApproachDate,
+            absoluteMagnitude = absoluteMagnitude,
+            estimatedDiameter = estimatedDiameter,
+            relativeVelocity = relativeVelocity,
+            distanceFromEarth = distanceFromEarth,
+            isPotentiallyHazardous = isPotentiallyHazardous
+        )
     }
 }

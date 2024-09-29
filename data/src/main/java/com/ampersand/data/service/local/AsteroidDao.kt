@@ -14,7 +14,4 @@ interface AsteroidDao {
 
     @Query("SELECT * FROM asteroid_entity")
     fun fetchAsteroids(): Flow<List<AsteroidEntity>>
-
-    @Query("SELECT * FROM asteroid_entity WHERE id = :id")
-    suspend fun getAsteroidById(id: Long): AsteroidEntity?
 }

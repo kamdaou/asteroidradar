@@ -3,7 +3,6 @@ package com.ampersand.domain.di
 import com.ampersand.domain.repository.NasaRepository
 import com.ampersand.domain.use_case.CalculateCloseApproachDaysUseCase
 import com.ampersand.domain.use_case.FetchAsteroidsUseCase
-import com.ampersand.domain.use_case.GetAsteroidUseCase
 import com.ampersand.domain.use_case.GetAsteroidsUseCase
 import com.ampersand.domain.use_case.GetDayImageUseCase
 import com.ampersand.domain.use_case.UseCaseWrapper
@@ -22,14 +21,12 @@ class DomainModule {
     fun provideUseCaseWrapper(
         calculateCloseApproachUseCase: CalculateCloseApproachDaysUseCase,
         fetchAsteroidsUseCase: FetchAsteroidsUseCase,
-        getAsteroidUseCase: GetAsteroidUseCase,
         getAsteroidsUseCase: GetAsteroidsUseCase,
         getDayImageUseCase: GetDayImageUseCase
     ): UseCaseWrapper {
         return UseCaseWrapper(
             calculateCloseApproachUseCase,
             fetchAsteroidsUseCase,
-            getAsteroidUseCase,
             getAsteroidsUseCase,
             getDayImageUseCase
         )
@@ -53,11 +50,6 @@ class DomainModule {
         return FetchAsteroidsUseCase(repository)
     }
 
-    @Provides
-    @Singleton
-    fun provideGetAsteroid(repository: NasaRepository): GetAsteroidUseCase {
-        return GetAsteroidUseCase(repository)
-    }
 
     @Provides
     @Singleton
