@@ -1,5 +1,7 @@
 package com.ampersand.presentation
 
+import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +35,7 @@ class MainFragment : Fragment() {
         binding.mainViewModel = mainViewModel
 
         val adapter = AsteroidAdapter(AsteroidListener { asteroidId ->
-            mainViewModel.onAsteroidClicked(asteroidId)
+            mainViewModel.onAsteroidClicked(asteroidId, isTablet = isTablet(this.context))
         })
 
 
@@ -44,6 +46,18 @@ class MainFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mainViewModel.loading.collect {
                     binding.statusLoadingWheel.visibility = if (it) View.VISIBLE else View.GONE
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                mainViewModel.navigateToAsteroidDetail.collect { asteroid ->
+                    if (asteroid != null) {
+//                        this@MainFragment.findNavController().navigate(MainFragmentDirections.actionShowDetail(asteroid))
+                        //tell the fragment that navigation was done
+                        mainViewModel.onAsteroidDetailNavigated()
+                    }
                 }
             }
         }
@@ -63,5 +77,10 @@ class MainFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun isTablet(context: Context?): Boolean {
+        if (context == null) return false
+        return (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
     }
 }

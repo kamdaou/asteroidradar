@@ -42,6 +42,12 @@
                 android:padding="@dimen/spacing_normal"
                 android:text="@string/image_of_the_day"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="0.dp"
+                android:layout_height="0.dp"
+
+                android:visibility="gone" />
         </FrameLayout>
 
         <androidx.recyclerview.widget.RecyclerView

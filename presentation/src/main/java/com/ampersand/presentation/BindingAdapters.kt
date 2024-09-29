@@ -3,6 +3,7 @@ package com.ampersand.presentation
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.ampersand.core.UiText
 import com.squareup.picasso.Picasso
 
 
@@ -43,4 +44,10 @@ fun binDayImage(imageView: ImageView, imgSrc: String?) {
                 .error(R.drawable.ic_broken_image)
                 .into(imageView)
     }
+}
+
+@BindingAdapter("closeApproachDate")
+fun bindCloseApproachDate(textView: TextView, date: UiText?) {
+    val context = textView.context
+    textView.text = date?.asString(context) ?: ""
 }

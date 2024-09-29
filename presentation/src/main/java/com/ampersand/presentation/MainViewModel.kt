@@ -26,18 +26,20 @@ class MainViewModel @Inject constructor(
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading.asStateFlow()
 
+    private var _navigateToAsteroidDetail = MutableStateFlow<Asteroid?>(null)
+    val navigateToAsteroidDetail: StateFlow<Asteroid?> = _navigateToAsteroidDetail.asStateFlow()
+
+    private val _selectedAsteroid = MutableStateFlow<Asteroid?>(null)
+    val selectedAsteroid: StateFlow<Asteroid?> = _selectedAsteroid.asStateFlow()
+
+    private val isTablet = MutableStateFlow(false)
+
     val asteroids = useCaseWrapper
         .getAsteroidsUseCase()
         .onStart {
             _loading.update {
                 true
             }
-        }
-        .onEach {
-            if (_loading.value)
-                _loading.update {
-                    false
-                }
         }
         .map { asteroids ->
             asteroids.map { asteroidModel: AsteroidModel ->
@@ -54,7 +56,17 @@ class MainViewModel @Inject constructor(
                 )
             }
         }
-
+        .onEach { emitted ->
+            emitted.firstOrNull()?.let { emitted ->
+                _selectedAsteroid.update {
+                    emitted
+                }
+            }
+            if (_loading.value)
+                _loading.update {
+                    false
+                }
+        }
         .stateIn(
             viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -75,6 +87,24 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onAsteroidClicked(asteroidId: Long) {
+    fun onAsteroidClicked(asteroidId: Long, isTablet: Boolean) {
+        _selectedAsteroid.update {
+            asteroids.value.find {
+                it.id == asteroidId
+            }
+        }
+        if (!isTablet) {
+            _navigateToAsteroidDetail.update {
+                _selectedAsteroid.value
+            }
+        }
+    }
+
+    fun onAsteroidDetailNavigated() {
+        _navigateToAsteroidDetail.value = null
+    }
+
+    fun isUsingTable(boolean: Boolean) {
+        isTablet.update { boolean }
     }
 }
