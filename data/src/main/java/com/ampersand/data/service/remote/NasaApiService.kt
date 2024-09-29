@@ -14,4 +14,10 @@ interface NasaApiService {
         @Query("end_date") endDate: String = LocalDate.now().plusDays(7).toString(),
         @Query("api_key") apiKey: String = BuildConfig.API_KEY
     ): Response<String>
+
+
+    @GET("planetary/apod")
+    suspend fun getDayImage(
+        @Query("api_key") apiKey: String = BuildConfig.API_KEY
+    ): Response<String>
 }

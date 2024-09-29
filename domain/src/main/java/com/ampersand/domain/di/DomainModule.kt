@@ -5,6 +5,7 @@ import com.ampersand.domain.use_case.CalculateCloseApproachDaysUseCase
 import com.ampersand.domain.use_case.FetchAsteroidsUseCase
 import com.ampersand.domain.use_case.GetAsteroidUseCase
 import com.ampersand.domain.use_case.GetAsteroidsUseCase
+import com.ampersand.domain.use_case.GetDayImageUseCase
 import com.ampersand.domain.use_case.UseCaseWrapper
 import dagger.Module
 import dagger.Provides
@@ -22,13 +23,15 @@ class DomainModule {
         calculateCloseApproachUseCase: CalculateCloseApproachDaysUseCase,
         fetchAsteroidsUseCase: FetchAsteroidsUseCase,
         getAsteroidUseCase: GetAsteroidUseCase,
-        getAsteroidsUseCase: GetAsteroidsUseCase
+        getAsteroidsUseCase: GetAsteroidsUseCase,
+        getDayImageUseCase: GetDayImageUseCase
     ): UseCaseWrapper {
         return UseCaseWrapper(
             calculateCloseApproachUseCase,
             fetchAsteroidsUseCase,
             getAsteroidUseCase,
-            getAsteroidsUseCase
+            getAsteroidsUseCase,
+            getDayImageUseCase
         )
     }
 
@@ -43,6 +46,7 @@ class DomainModule {
     fun provideGetAsteroids(repository: NasaRepository): GetAsteroidsUseCase {
         return GetAsteroidsUseCase(repository)
     }
+
     @Provides
     @Singleton
     fun provideFetchAsteroids(repository: NasaRepository): FetchAsteroidsUseCase {
@@ -53,5 +57,11 @@ class DomainModule {
     @Singleton
     fun provideGetAsteroid(repository: NasaRepository): GetAsteroidUseCase {
         return GetAsteroidUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetDayImage(repository: NasaRepository): GetDayImageUseCase {
+        return GetDayImageUseCase(repository)
     }
 }

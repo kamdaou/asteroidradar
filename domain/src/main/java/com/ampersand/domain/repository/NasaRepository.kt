@@ -11,4 +11,6 @@ interface NasaRepository {
     suspend fun getAsteroidById(id: Long): ApiResult<AsteroidModel>
 
     fun getAsteroids(): Flow<List<AsteroidModel>>
+
+    suspend fun getDayImage(): ApiResult<String>
 }

@@ -1,4 +1,4 @@
-package com.ampersand.asteroidradar.ui
+package com.ampersand.presentation
 
 import android.os.Parcelable
 import com.ampersand.core.UiText

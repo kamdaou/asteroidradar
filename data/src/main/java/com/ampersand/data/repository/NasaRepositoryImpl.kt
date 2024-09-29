@@ -1,5 +1,6 @@
 package com.ampersand.data.repository
 
+import android.util.Log
 import com.ampersand.core.ApiResult
 import com.ampersand.core.R
 import com.ampersand.core.UiText
@@ -25,33 +26,60 @@ class NasaRepositoryImpl @Inject constructor(
 ) : NasaRepository {
 
     override suspend fun fetchAsteroids() {
-            try {
-                val response = nasaApiService.fetchAsteroids()
-                if (response.isSuccessful && response.body() != null) {
-                    val asteroidJson = JSONObject(response.body())
-                    val asteroidList = parseAsteroidsJsonResult(asteroidJson)
+        try {
+            val response = nasaApiService.fetchAsteroids()
+            if (response.isSuccessful && response.body() != null) {
+                val asteroidJson = JSONObject(response.body())
+                val asteroidList = parseAsteroidsJsonResult(asteroidJson)
 
-                    asteroidList.forEach { asteroid ->
-                        dao.insertAsteroid(asteroid)
-                    }
+                asteroidList.forEach { asteroid ->
+                    dao.insertAsteroid(asteroid)
                 }
-            } catch (_: Exception) {
             }
+        } catch (e: Exception) {
+            Log.e("NasaRepositoryImpl", "fetchAsteroids: ${e.localizedMessage}")
         }
+    }
 
     override suspend fun getAsteroidById(id: Long): ApiResult<AsteroidModel> =
         withContext(ioDispatcher) {
-            dao.getAsteroidById(id)?.let { asteroidEntity ->
-                return@withContext ApiResult.Success(asteroidEntity.toAsteroidModel())
+            try {
+                dao.getAsteroidById(id)?.let { asteroidEntity ->
+                    return@withContext ApiResult.Success(asteroidEntity.toAsteroidModel())
+                }
+                return@withContext ApiResult.Error(message = UiText.StringResource(R.string.error_not_found))
+            } catch (e: Exception) {
+                Log.e("NasaRepositoryImpl", "getAsteroidById: ${e.localizedMessage}")
+                return@withContext ApiResult.Error(message = UiText.DynamicString(e.localizedMessage))
             }
-            return@withContext ApiResult.Error(message = UiText.StringResource(R.string.error_not_found))
         }
 
     override fun getAsteroids(): Flow<List<AsteroidModel>> {
         return dao.fetchAsteroids()
-            .catch { _: Throwable -> }
-            .map { value: List<AsteroidEntity> ->
-                value.map { it.toAsteroidModel() }
+            .catch { e: Throwable ->
+                Log.e("NasaRepositoryImpl", "getAsteroids: ${e.localizedMessage}")
             }
+            .map { value: List<AsteroidEntity> ->
+                value.map {
+                    it.toAsteroidModel()
+                }
+            }
+
     }
+
+
+    override suspend fun getDayImage(): ApiResult<String> =
+        withContext(ioDispatcher) {
+            try {
+                val response = nasaApiService.getDayImage()
+                if (response.isSuccessful && response.body() != null) {
+                    val url = JSONObject(response.body()).getString("url")
+                    return@withContext ApiResult.Success(url)
+                } else {
+                    return@withContext ApiResult.Error(message = UiText.StringResource(R.string.error_not_found))
+                }
+            } catch (e: Exception) {
+                return@withContext ApiResult.Error(message = UiText.DynamicString(e.localizedMessage))
+            }
+        }
 }

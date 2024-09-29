@@ -4,5 +4,6 @@ data class UseCaseWrapper(
     val calculateCloseApproachUseCase: CalculateCloseApproachDaysUseCase,
     val fetchAsteroidsUseCase: FetchAsteroidsUseCase,
     val getAsteroidUseCase: GetAsteroidUseCase,
-    val getAsteroidsUseCase: GetAsteroidsUseCase
+    val getAsteroidsUseCase: GetAsteroidsUseCase,
+    val getDayImageUseCase: GetDayImageUseCase
 )

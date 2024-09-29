@@ -14,6 +14,9 @@ hiltVersion = "2.51.1"
 retrofit = "2.11.0"
 room = "2.6.1"
 ksp = "1.9.23-1.0.20"
+lifecycleViewmodelKtx = "2.6.2"
+databindingCommon = "8.6.1"
+picasso = "2.8"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -32,6 +35,9 @@ scalars = { group = "com.squareup.retrofit2", name = "converter-scalars", versio
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
+androidx-databinding-common = { group = "androidx.databinding", name = "databinding-common", version.ref = "databindingCommon" }
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
 
 [bundles]
 retrofit = [
